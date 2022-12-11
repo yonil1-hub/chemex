@@ -1,13 +1,13 @@
 from flask import Flask
 from os import environ
-from src.auth import auth
-from src.reaction import reaction
-from src.thermodynamics import thermodynamics
-from src.biotech import biotech
-from src.chemistry import chemistry
-from src.fluid import fluid
-from src.material import material
-
+from .auth import auth
+from .reaction import reaction
+from .thermodynamics import thermodynamics
+from .biotech import biotech
+from .chemistry import chemistry
+from .fluid import fluid
+from .material import material
+from .database import db
 
 
 
@@ -18,11 +18,16 @@ def create_app(test_config=None):
                 )
     if test_config is None:
         app.config.from_mapping(
-            SECRET_KEY=environ.get("SECRET_KEY")
+            SECRET_KEY=environ.get("SECRET_KEY"),
+            SQLALCHEMY_DATABASE_URI=environ.get("SQLALCHEMY_DB_URI")
+             
         )
     else:
         app.config.from_mapping(test_config)
 
+
+    db.app=app
+    db.init_app(app   )
     app.register_blueprint(auth)
     app.register_blueprint(reaction)
     app.register_blueprint(chemistry)
