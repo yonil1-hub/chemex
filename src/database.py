@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+
 db = SQLAlchemy()
 
 class Users(db.Model):
@@ -26,7 +27,7 @@ class Users(db.Model):
     role = db.Column(db.String(30))
     createdAt = db.Column(db.DateTime(), default=datetime.utcnow())
     updatedAt= db.Column(db.DateTime(), onupdate=datetime.utcnow())
-    posts = db.relationship('Posts', backref='users', lazy='dynamic')
+    posts = db.relationship('Posts', backref='users',lazy='dynamic')
 
     def __repr__(self) -> str:
         return "<User {}>".format(self.username)
@@ -41,7 +42,6 @@ class Posts(db.Model):
             title - title for post
             description - the description for the post
             body - the main body(content) of the post
-            author -  the author of the post
             created_at -  the time the post created
             published_at - the time the post published
             likes - the number of likes the post have
@@ -50,7 +50,7 @@ class Posts(db.Model):
     """
 
     postId = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    userId = db.Column(db.Integer(), db.ForeignKey('users.userId') )
+    userId = db.Column(db.Integer, db.ForeignKey('users.userId') )
     title = db.Column(db.String(255), nullable=False, unique=True)
     description = db.Column(db.Text(), nullable=False, unique=False)
     body = db.Column(db.Text(), nullable=False)
@@ -59,6 +59,7 @@ class Posts(db.Model):
     likes = db.Column(db.Integer(), default=0)
     category = db.Column(db.String(80), nullable=False)
     comments = db.relationship('Comments', backref='posts', lazy='dynamic')
+    replies = db.relationship('Replies', backref='posts', lazy='dynamic')
 
     
 
@@ -76,12 +77,30 @@ class Comments(db.Model):
                 body - the body(content) of the comment
                 createdAt - the time the comment is made
     """
-    __tablename__ = 'comments'
     commentId = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     body = db.Column(db.Text(), nullable=False)
     createdAt = db.Column(db.DateTime(), default=datetime.utcnow())
     updatedAt= db.Column(db.DateTime(), onupdate=datetime.utcnow())
     postId = db.Column(db.Integer(), db.ForeignKey('posts.postId'))
+    replies = db.relationship('Replies', backref='comments', lazy='dynamic')
 
     def __repr__(self) -> str:
-        return "<Comment {}>".format(self.body)
+        return "<Comment {}>".format(self.commentId)
+
+class Replies(db.Model):
+    """
+        model class for replies on posts
+            Attributes:
+                replyId - Id of reply
+                postId - post id for the reply
+                commentId - comment id for the reply
+                body - content of the reply
+    """
+    replyId = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    userId = db.Column(db.Integer(), db.ForeignKey('users.userId'))
+    commentId = db.Column(db.ForeignKey('comments.commentId'))
+    postId = db.Column(db.ForeignKey('posts.postId'))
+    body = db.Column(db.Text(), nullable=False)
+
+    def __repr__(self) -> str:
+        return "<Reply {}>".format(self.replyId)
