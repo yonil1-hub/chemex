@@ -111,8 +111,3 @@ def login():
             return jsonify({"msg": "Wrong password"}), 401
     else:
         return jsonify({"msg": "No account with given email"}), 401
-
-@auth.get("/me")
-@jwt_required()
-def me():
-    return "hello!" 

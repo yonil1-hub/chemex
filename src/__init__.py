@@ -38,7 +38,8 @@ def create_app(test_config=None):
 
     db.app=app
     JWTManager(app)
-    db.init_app(app   )
+    db.init_app(app)
+    app.url_map.strict_slashes = False
     app.register_blueprint(auth)
     app.register_blueprint(reaction)
     app.register_blueprint(chemistry)

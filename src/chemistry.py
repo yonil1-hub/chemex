@@ -5,7 +5,10 @@ from flask import (
 )
 from .database import (
                         db,
-                        Posts
+                        Posts,
+                        Users,
+                        Comments,
+                        Replies
 )
 from flask_jwt_extended import (
                                  get_jwt_identity,
@@ -63,9 +66,36 @@ def createPost():
 )
 def get_recent_posts():
     """returns recent five posts from our database"""
-    posts = Posts.query.all()
-    return jsonify({"posts":posts})
+    posts = (Posts
+                  .query
+                  .order_by(Posts.createdAt.desc())
+                  .limit(5)
+                  .all()
+    )
+    posts_data = {}
+    for post in posts:
+        id = post.postId
+        user_id = post.userId
+        author = Users.query.filter_by(userId=user_id).first()
+        if author is None:
+            continue
+        thisPost = {}
+        thisPost['author'] = author.username
+        thisPost['title'] = post.title
+        thisPost['description'] = post.description
+        thisPost['body'] = post.body
+        thisPost['createAt'] = post.createdAt
+        posts_data[id] = thisPost
+    return jsonify(posts_data)
 
+@chemistry.route("/comment/<int:postId>")
+def getComments(postId):
+    """Returns comments on post for given postId"""
+
+    
+    # first check if post is in databse
+    if Posts.query.filter_by(postId=postId).first() is None:
+        return jsonify({"msg":"Post not Found"}), 400
     
 
     
