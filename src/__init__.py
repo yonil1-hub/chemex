@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from os import environ
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
@@ -35,7 +36,7 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
-
+    cors = CORS(app)
     db.app=app
     JWTManager(app)
     db.init_app(app)

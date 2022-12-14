@@ -96,6 +96,20 @@ def getComments(postId):
     # first check if post is in databse
     if Posts.query.filter_by(postId=postId).first() is None:
         return jsonify({"msg":"Post not Found"}), 400
+    post = Posts.query.filter_by(postId=postId).first()
+    return jsonify({}), 200
+
+@chemistry.route("/comment/<int:postId>", methods=["POST"])
+def createComment(postId):
+    """create comment for post given postId"""
+    if Posts.query.filter_by(postId=postId).first() is None:
+        return jsonify({"msg": "Post not Found"}), 400
+
+    if not request.get_json():
+        return jsonify({"msg": "Not a JSON"}), 400
+    if "body" not in request.get_json():
+        return jsonify({"msg": "Missing body "}), 400
+    return jsonify({})
     
 
     
