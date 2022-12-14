@@ -7,7 +7,7 @@ reaction = Blueprint("reaction",
 @reaction.get("/all")
 def all():
     return {
-        "post_ui":1,
+        "post_id":1,
         "author":"Yaekob Demisse",
         "title":"Batch reaction",
         "body":"this is tutoril about batch reactor"
