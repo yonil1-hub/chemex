@@ -1,7 +1,8 @@
 from flask import (
                     Blueprint,
                     request,
-                    jsonify
+                    jsonify,
+                    render_template
 )
 from werkzeug.security import (
                                 generate_password_hash,
@@ -14,6 +15,7 @@ from flask_jwt_extended import (
                                 create_refresh_token,
                                 jwt_required
 )
+from bleach import clean
 
 
 auth = Blueprint("auth",
@@ -47,21 +49,19 @@ def signup():
     
 
     #check if the password is strong
-    if len(password) < 8:
+    if len(password) < 6:
         return jsonify({"msg":"Password must be 8 or more character"}), 400
-
-    # email_validator here
-
-
+    
+    # check if the email is unique
+    if Users.query.filter_by(email=email).first() is not None:
+        return jsonify({"msg":"Email is already in use"}), 409
+        
     # check if the username is unique
     username = signupInfo['username']
     if Users.query.filter_by(username=username).first() is not None:
         return jsonify({"msg":"Username is already taken"}), 409
 
-    # check if the email is unique
-    if Users.query.filter_by(email=email).first() is not None:
-        return jsonify({"msg":"Email is already in use"}), 409
-    
+
     pwd_hash = generate_password_hash(password)
     user = Users(
                  firstName=firstName,
@@ -111,3 +111,8 @@ def login():
             return jsonify({"msg": "Wrong password"}), 401
     else:
         return jsonify({"msg": "No account with given email"}), 401
+
+@auth.post("/test")
+def test():
+    data = request.get_json()
+    print(data)

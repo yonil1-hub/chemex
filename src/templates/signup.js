@@ -1,26 +1,44 @@
-// function matchPassword() {
-//   let pw1 = document.getElementById("passowrd").value;
-//   let pw2 = document.getElementsByClassName("comfrim").value;
-//   console.log(pw1, pw2);
-// }
-$(function () {
-  $("form").submit(function (event) {
-    $.ajax({
-      data: {
-        firstName: $("#firstName").val(),
-        lastName: $("#lastName").val(),
-        email: $("#email").val(),
-        username: $("#username").val(),
-        password: $("#password").val(),
-      },
-      type: "POST",
-      url: "http://127.0.0.1:5000/api/v1/auth/signup",
-      headers: { "Content-Type": "application/json " },
+//form submission
+$("form").submit(function (e) {
+  let formInput = {
+    firstName: $("#firstName").val(),
+    lastName: $("#lastName").val(),
+    username: $("#username").val(),
+    email: $("#email").val(),
+    password: $("#password").val(),
+  };
+  let header = {
+    "Content-Type": "application/json",
+  };
 
-      error: function (e) {
-        console.log(e);
-      },
-    });
-    event.preventDefault();
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:5000/api/v1/auth/signup",
+    headers: header,
+    data: JSON.stringify(formInput),
+    success: function (data) {
+      window.location.replace("login.html");
+    },
+    error: function (xhr) {
+      let msg = xhr.responseJSON.msg;
+      if (msg == "Username is already taken") {
+        $("#takenuser").text(msg);
+        $("#takenemail").hide();
+      } else if (msg == "Email is already in use") {
+        $("#takenemail").text(msg);
+        $("#takenuser").hide();
+      }
+    },
   });
+  e.preventDefault();
+});
+
+//cofrim passwod event handler
+$("#cfrm").keydown(function () {
+  let orginal = $("#password").val();
+  if ($("#cfrm").val() !== orginal) {
+    $("#samepass").text("Password don't match");
+  } else {
+    $("#samepass").hide();
+  }
 });
