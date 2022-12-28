@@ -1,118 +1,119 @@
 from flask import (
-                    Blueprint,
-                    request,
-                    jsonify,
-                    render_template
+    Blueprint,
+    request,
+    jsonify,
+    render_template,
 )
 from werkzeug.security import (
-                                generate_password_hash,
-                                check_password_hash
+    generate_password_hash,
+    check_password_hash,
 )
 from .database import Users
 from .database import db
 from flask_jwt_extended import (
-                                create_access_token,
-                                create_refresh_token,
-                                jwt_required
+    create_access_token,
+    create_refresh_token,
+    jwt_required,
 )
 from bleach import clean
 
+# Create a Blueprint for the auth routes
+auth = Blueprint(
+    "auth",
+    __name__,
+    url_prefix="/api/v1/auth",
+)
 
-auth = Blueprint("auth",
-                 __name__,
-                 url_prefix="/api/v1/auth"
-                 )
-
-@auth.post('/signup')
+@auth.post("/signup")
 def signup():
-    required = ["firstName", "lastName", "username",
-                "email", "password"
-               ]
-    signupInfo = request.get_json()
+    """
+    Handle signup requests.
+    """
+    # List of required keys in the request
+    required = ["firstName", "lastName", "username", "email", "password"]
+    signup_info = request.get_json()
 
-    #check if the form is valid JSON
-    if not signupInfo:
-        return jsonify({"msg":"Not a JSON"}), 400
-    
-    # check if all required keys are passed to request
-    # if not return error message with status code of 400(bad request)
+    # Check if the request is a valid JSON
+    if not signup_info:
+        return jsonify({"msg": "Not a JSON"}), 400
+
+    # Check if all required keys are present in the request
+    # If not, return an error message with a status code of 400 (bad request)
     for key in required:
-        if key not in signupInfo.keys():
-            return jsonify({"msg":"Missing {}".format(key)}), 400
+        if key not in signup_info.keys():
+            return jsonify({"msg": "Missing {}".format(key)}), 400
 
-    firstName = signupInfo['firstName']
-    lastName = signupInfo['lastName']
-    username = signupInfo['username']
-    email = signupInfo['email']
-    password = signupInfo['password']
-    
-    
+    first_name = signup_info["firstName"]
+    last_name = signup_info["lastName"]
+    username = signup_info["username"]
+    email = signup_info["email"]
+    password = signup_info["password"]
 
-    #check if the password is strong
+    # Check if the password is strong enough
     if len(password) < 6:
-        return jsonify({"msg":"Password must be 8 or more character"}), 400
-    
-    # check if the email is unique
+        return jsonify({"msg": "Password must be 8 or more characters"}), 400
+
+    # Check if the email is unique
     if Users.query.filter_by(email=email).first() is not None:
-        return jsonify({"msg":"Email is already in use"}), 409
-        
-    # check if the username is unique
-    username = signupInfo['username']
+        return jsonify({"msg": "Email is already in use"}), 409
+
+    # Check if the username is unique
     if Users.query.filter_by(username=username).first() is not None:
-        return jsonify({"msg":"Username is already taken"}), 409
+        return jsonify({"msg": "Username is already taken"}), 409
 
-
+    # Hash the password
     pwd_hash = generate_password_hash(password)
     user = Users(
-                 firstName=firstName,
-                 lastName=lastName,
-                 username=username,
-                 email=email,
-                 password=pwd_hash
+        firstName=first_name,
+        lastName=last_name,
+        username=username,
+        email=email,
+        password=pwd_hash,
     )
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"msg":"User created successfully",
-                    "user":{
-                        "username":username,
-                        "email":email
-                    }
-    }), 201
+    return jsonify(
+        {
+            "msg": "User created successfully",
+            "user": {
+                "username": username,
+                "email": email,
+            },
+        }
+    ), 201
+
+
+
 @auth.post("/login")
 def login():
-    """
-        take care of login queries 
-    """
-    # required feild for post request
+    """Take care of login queries."""
+    # Required fields for post request
     required = ["email", "password"]
-    loginInfo = request.get_json()
-    if not loginInfo:
-        return jsonify({"msg":"Not a JSON!"}), 400 
+    login_info = request.get_json()
+    if not login_info:
+        return jsonify({"msg": "Not a JSON!"}), 400
     for key in required:
-        if key not in loginInfo.keys():
+        if key not in login_info.keys():
             return jsonify({"msg": "Missing {}".format(key)}), 400
-    email = loginInfo['email']
-    password = loginInfo['password']
+    email = login_info["email"]
+    password = login_info["password"]
 
-    # check the login info with database
+    # Check the login info with database
     user = Users.query.filter_by(email=email).first()
     if user:
         if check_password_hash(user.password, password):
-            accessToken = create_access_token(identity=user.userId)
+            access_token = create_access_token(identity=user.user_id)
 
-            return jsonify({
-                            "user": {
-                                "access":accessToken,
-                                "username":user.username
-                            }
-            }), 200
+            return jsonify(
+                {
+                    "user": {
+                        "access": access_token,
+                        "username": user.username,
+                    }
+                }
+            ), 200
         else:
             return jsonify({"msg": "Wrong password"}), 401
     else:
         return jsonify({"msg": "No account with given email"}), 401
-
-@auth.post("/test")
-def test():
-    data = request.get_json()
-    print(data)

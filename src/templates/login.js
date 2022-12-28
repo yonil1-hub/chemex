@@ -2,14 +2,18 @@
 $("#forgot").hide();
 $("#signup").hide();
 $("#account").hide();
+$("#error").hide();
 
 //validate email
 $("#emailcheck").hide();
 $("#email").blur(function () {
   let val = $(this).val();
-  if (val.length < 5) {
+  let exist = val.indexOf("@");
+  if (exist === -1) {
     $("#emailcheck").text("Please enter valid email");
     $("#emailcheck").show();
+  } else {
+    $("#emailchek").hide();
   }
 });
 
@@ -47,7 +51,14 @@ $("#submit").click(function () {
     error: function (xhr) {
       let msg = xhr.responseJSON.msg;
       if (msg == "Wrong password") {
-        $("#wrongpass").text(msg);
+        $("#error").text(msg);
+        $("#error").show();
+        $("#forgot").show();
+      } else if (msg === "No account with given email") {
+        $("#submit").hide();
+        $("#error").text(msg);
+        $("#error").show();
+        $("#signup").show();
       }
     },
   });

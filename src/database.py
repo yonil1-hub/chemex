@@ -28,6 +28,8 @@ class Users(db.Model):
     createdAt = db.Column(db.DateTime(), default=datetime.utcnow())
     updatedAt= db.Column(db.DateTime(), onupdate=datetime.utcnow())
     posts = db.relationship('Posts', backref='users',lazy='dynamic')
+    comments = db.relationship('Comments', backref='users',lazy='dynamic')
+    replies = db.relationship('Replies', backref='users',lazy='dynamic')
 
     def __repr__(self) -> str:
         return "<User {}>".format(self.username)
@@ -78,6 +80,7 @@ class Comments(db.Model):
                 createdAt - the time the comment is made
     """
     commentId = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    userId = db.Column(db.Integer(), db.ForeignKey('users.userId'))
     body = db.Column(db.Text(), nullable=False)
     createdAt = db.Column(db.DateTime(), default=datetime.utcnow())
     updatedAt= db.Column(db.DateTime(), onupdate=datetime.utcnow())

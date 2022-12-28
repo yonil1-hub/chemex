@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Isothermal Plug Flow Reactor Design Tutorial</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <!-- sidebar content goes here -->
+      </div>
+      <div class="col-md-9">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h3>{{ postInfo.title }}</h3>
+          </div>
+          <div class="card-body">
+            <p>{{ postInfo.body }}</p>
+            <p class="mb-0"><small>{{ postInfo.duration }} ago by {{ userInfo.username }}</small></p>
+            <p><small>{{ postInfo.likes }} likes</small></p>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <h4>Comments</h4>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for commentId, commentInfo in commentInfo.items() %}
+              <li class="list-group-item">
+                <p>{{ commentInfo.body }}</p>
+                <p class="mb-0"><small>{{ commentInfo.duration }} ago by {{ commentInfo.user }}</small></p>
+                <button class="btn btn-secondary btn-sm mr-2" data-toggle="collapse" data-target="#replies-{{ commentId }}">Show Replies</button>
+                <div class="collapse" id="replies-{{ commentId }}">
+                  <ul class="list-group list-group-flush">
+                    {% for replyId, replyInfo in commentInfo.replies.items() %}
+                      <li class="list-group-item">
+                        <p>{{ replyInfo.body }}</p>
+                        <p class="mb-0"><small>{{ replyInfo.duration }} ago by {{ replyInfo.user }}</small></p>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

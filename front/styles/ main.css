@@ -9,7 +9,7 @@ body {
 /*--- navigation bar ---*/
 
 .navbar {
-  background: #6ab446;
+  background: #b4cca8;
 }
 
 .nav-link,
@@ -266,4 +266,10 @@ body {
 #submitbutton {
   text-align: center;
   margin: auto;
+}
+
+#recentposts {
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
 }
