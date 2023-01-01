@@ -1,0 +1,65 @@
+small {
+  font-style: italic;
+  text-align: center;
+  font-size: x-small;
+  display: inline-block;
+}
+.category {
+  margin-left: 33%;
+  margin-right: 15%;
+}
+
+.body p {
+  font-size: 14px;
+  font-family: sans-serif;
+  width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (max-width: 1000px) {
+  .category {
+    margin-left: 0;
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+  }
+
+  #duration {
+    display: inline-block;
+    width: 30%;
+  }
+}
+
+.likes {
+  text-align: center;
+}
+#like_info {
+  position: fixed;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#clapping_icon {
+  width: 32px;
+  cursor: pointer;
+}
+
+.comment {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.comment .text {
+  font-size: 16px;
+}
+
+.comment .meta {
+  font-size: 14px;
+  color: #666;
+}
+
+.comment .reply-button {
+  float: right;
+}

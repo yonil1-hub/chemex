@@ -24,7 +24,7 @@ class Users(db.Model):
     username = db.Column(db.String(30), nullable=False, unique=True)
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(30))
+    role = db.Column(db.String(30), default='Normal')
     createdAt = db.Column(db.DateTime(), default=datetime.utcnow())
     updatedAt= db.Column(db.DateTime(), onupdate=datetime.utcnow())
     posts = db.relationship('Posts', backref='users',lazy='dynamic')
@@ -104,6 +104,7 @@ class Replies(db.Model):
     commentId = db.Column(db.ForeignKey('comments.commentId'))
     postId = db.Column(db.ForeignKey('posts.postId'))
     body = db.Column(db.Text(), nullable=False)
+    createdAt = db.Column(db.DateTime(), default=datetime.utcnow())
 
     def __repr__(self) -> str:
         return "<Reply {}>".format(self.replyId)

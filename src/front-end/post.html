@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="post_title1"></title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="post.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+      integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="content container">
+      <div class="postinfo">
+        <h3 id="post_title2">post Title</h3>
+        <hr />
+        <p>
+          <small
+            >Created by: <a href=""><span id="author">Jamescog</span></a>
+          </small>
+          <small class="category"
+            >Category: <a href=""><span id="category">Category</span></a>
+          </small>
+          <small id="duration"><span>31 minutes ago</span></small>
+        </p>
+      </div>
+      <hr />
+      <div class="likes">
+        <p id="like_info">
+          <img
+            id="clapping_icon"
+            src="./images/clapping.png"
+            alt="Clapping-hands"
+          />
+          <span id="noOfLikes"></span>
+        </p>
+      </div>
+      <div class="container body"></div>
+
+      <div class="postbody"></div>
+
+      <div id="commentContainer" class="container">
+        <div class="row justify-content-center">
+          <div id="allcomments" class="col-12 col-md-8">
+            <h2>Comments</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8">
+            <h2>Leave a Comment</h2>
+            <form>
+              <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea
+                  class="form-control"
+                  id="newComment"
+                  rows="3"
+                ></textarea>
+                <p id="shortComment"></p>
+              </div>
+              <button id="commentSubmit" type="submit" class="btn btn-primary">
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Javascript-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="post.js"></script>
+  </body>
+</html>

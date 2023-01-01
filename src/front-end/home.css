@@ -1,0 +1,84 @@
+.nav-item:hover .dropdown-menu {
+  display: block;
+}
+
+input[type="text"] {
+  width: 60%;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+button[type="submit"] {
+  padding: 0.5em 1em;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#calltoAction:hover {
+  background-color: rgb(15, 83, 83);
+}
+
+.intro {
+  background-color: #f8f8f8;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.intro h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.intro p {
+  font-size: 1.2em;
+  line-height: 1.5;
+  margin-bottom: 40px;
+}
+
+.intro ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.intro ul li {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.intro .button {
+  display: inline-block;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.intro .button:hover {
+  background-color: #444;
+  cursor: pointer;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 30;
+  object-fit: contain;
+}
+
+.content {
+  width: 80%;
+  margin: auto;
+}
+#recent,
+#about {
+  text-align: center;
+}

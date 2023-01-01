@@ -39,6 +39,8 @@ def create():
         return 'No description provided'
 
     userId= 1
+    if Users.query.filter_by(userId=userId).first() is None:
+        return jsonify({"msg":"No user Found"}), 400
 
     # Save the file to a temporary location
     file.save('temp.docx')
@@ -68,16 +70,17 @@ def create():
 
     # Parse the HTML content using BeautifulSoup
     soup = BeautifulSoup(html, 'html.parser')
+    
+    for element in soup.find_all():
+        if element.name in ['script', 'iframe', 'base', 'form', 'object']:
+            element.decompose()
     body = str(soup.body)
 
-    # Sanitize the HTML content to prevent potential security vulnerabilities
-    safe  = bleach.clean(body)
-
-    # Save the post to the database
+    
     try:
-        post  = Posts(userId=userId, body=safe, title=title, category=category, description=description)
+        post  = Posts(userId=userId, body=body, title=title, category=category, description=description)
         db.session.add(post)
         db.session.commit()
     except Exception as e:
-        return jsonify({"msg":"Error saving post to database: {}".format(e)})
+        return jsonify({"msg":"Error saving post to database: {}".format(e)}), 500
     return jsonify({"msg":"Post created successfully!"}), 201

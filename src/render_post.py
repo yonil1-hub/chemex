@@ -103,6 +103,8 @@ def single_post(id):
 
     # Retrieve the post with the given id
     post = Posts.query.filter_by(postId=id).first()
+    if post is None:
+        return jsonify({"msg":"Post NOt FOund"}), 400
 
     # Retrieve the user who created the post
     user_id = post.userId
@@ -120,6 +122,7 @@ def single_post(id):
     # Add information about the post to the dictionary
     post_info['id'] = post.postId
     post_info['title'] = post.title
+    post_info['category'] = post.category
     post_info['body'] = post.body
     post_info['likes'] = post.likes
     post_info['description'] = post.description
@@ -142,7 +145,7 @@ def single_post(id):
             reply = {}
             reply['body'] = rep.body
             reply['user'] = Users.query.filter_by(userId=rep.userId).first().username
-            # reply['duration'] = time_formatter(rep.createdAt)
+            reply['duration'] = time_formatter(rep.createdAt)
 
             reply_info[rep.replyId] = reply
 
