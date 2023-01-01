@@ -1,7 +1,6 @@
 $(document).ready(function () {
   $("#upload").submit(function (event) {
     event.preventDefault();
-    event.stopPropagation();
 
     let title = $("#tutorial-title").val();
     let description = $("#tutorial-description").val();

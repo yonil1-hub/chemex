@@ -3,7 +3,7 @@ $(document).ready(function () {
   function appnedReplies(replies) {
     $.each(replies, function (index, reply) {
       $("#allcomments").append(`
-      <div class="reply">
+      <div class="reply hidden">
         <p class="text">${reply.body}
         </p>
         <hr/>
@@ -14,7 +14,7 @@ $(document).ready(function () {
   }
   $.ajax({
     type: "GET",
-    url: "http://127.0.0.1:5000/api/v1/post/8",
+    url: "http://127.0.0.1:5000/api/v1/post/16",
     // handle success
     success: function (response) {
       let postinfo = response.msg["post_info"];
@@ -41,7 +41,7 @@ $(document).ready(function () {
     <hr/>
     <small class="meta">Posted by ${value.user}, ${value.duration}</small>
     <button class="btn btn-primary btn-sm reply-button">Reply</button>
-    <button class="btn btn-primary btn-sm replies">
+    <button class="btn btn-primary btn-sm showrepliesbtn">
       Show Replies
     </button>
   </div>
@@ -124,5 +124,8 @@ $(document).ready(function () {
     });
   });
 
-  //handle reply button
+  //handle show replies button
+  $(".showrepliesbtn").click(function () {
+    alert("clicked");
+  });
 });

@@ -52,21 +52,29 @@ def create():
     # Convert the MS Word document to HTML and extract and rename images from it
     try:
         result = subprocess.run(
-            ['pandoc', '-s', 'temp.docx', '-t', 'html', '--extract-media=images/{}'.format(postno)],
+            ['pandoc', '-s', 'temp.docx', '-t', 'html', '--extract-media=./front-end/images/{}'.format(postno)],
             capture_output=True, text=True, check=True
         )
         html = result.stdout
     except subprocess.CalledProcessError as e:
+        print(e)
         return jsonify({"msg":"Error converting Word document to HTML: {}".format(e)}), 500
 
     # Update image names in the HTML document
-    image_pattern = r'src="images/image(\d+).jpg"'
-    for i, match in enumerate(re.finditer(image_pattern, html)):
-        # Generate a new UUID for the image
-        image_uuid = str(uuid.uuid4())
+    # Find the src attributes of the images in the HTML content
+    soup = BeautifulSoup(html, 'html.parser')
+    images = soup.find_all('img')
 
-        # Replace the old image name with the new UUID in the HTML content
-        html = html[:match.start(1)] + image_uuid + html[match.end(1):]
+    # Update the src attributes with the new path
+    for image in images:
+        name = image['src'].split("/")[-1]
+        image['src'] = 'images/{}/media/{}'.format(postno, name)
+
+    # Convert the BeautifulSoup object back to HTML
+    html = str(soup)
+
+
+
 
     # Parse the HTML content using BeautifulSoup
     soup = BeautifulSoup(html, 'html.parser')
