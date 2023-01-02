@@ -57,6 +57,7 @@ def recent():
         about['description'] = post.description
         createdAt = post.createdAt
         about['duration'] = time_formatter(createdAt)
+        about['category'] = post.category
 
         # Add to the bigger dictionary
         recent_all[topic] = about

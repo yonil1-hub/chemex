@@ -1,4 +1,8 @@
 $(document).ready(function () {
+  // Get data from caller
+  let params = new URLSearchParams(location.search);
+  let postId = params.get("postId");
+  let userId = params.get("userId");
   //function that applies replies
   function appnedReplies(replies) {
     $.each(replies, function (index, reply) {
@@ -14,7 +18,7 @@ $(document).ready(function () {
   }
   $.ajax({
     type: "GET",
-    url: "http://127.0.0.1:5000/api/v1/post/16",
+    url: "http://127.0.0.1:5000/api/v1/post/" + postId,
     // handle success
     success: function (response) {
       let postinfo = response.msg["post_info"];
@@ -67,7 +71,7 @@ $(document).ready(function () {
       let data = { data: "dislike" };
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:5000/api/v1/handle/likes/8",
+        url: "http://127.0.0.1:5000/api/v1/handle/likes/" + postId,
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         success: function (response) {
@@ -84,7 +88,7 @@ $(document).ready(function () {
       let data = { data: "like" };
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:5000/api/v1/handle/likes/8",
+        url: "http://127.0.0.1:5000/api/v1/handle/likes/" + postId,
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         success: function (response) {
@@ -108,7 +112,7 @@ $(document).ready(function () {
     } else {
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:5000/api/v1/handle/comment/8",
+        url: "http://127.0.0.1:5000/api/v1/handle/comment/" + postId,
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function (response) {

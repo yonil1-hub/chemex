@@ -1,20 +1,33 @@
 $(document).ready(function () {
-  // make ajax call to server
+  //handle homepage
+
+  // get recent posts
   $.ajax({
     type: "GET",
     url: "http://127.0.0.1:5000/api/v1/recent",
     success: function (response) {
-      let serverResponse = response.msg;
-      let array = Object.values(serverResponse);
-      let counter = 0;
+      let obj = Object.values(response.msg);
 
-      // fill the title
-      $(".tutorial")
-        .find("h3")
-        .each(function () {
-          $(this).text(array[counter].title);
-          counter = counter + 1;
-        });
+      //fill all the titles
+      let num = 0;
+      $(".card h5").each(function () {
+        let category = obj[num].category;
+        $(this).text(category);
+        num += 1;
+      });
+      // fill the descriptions
+      num = 0;
+      $(".card p").each(function () {
+        let desc = obj[num].description;
+        $(this).text(desc);
+        num += 1;
+      });
     },
   });
+  // $("#readmore1").click(function (e) {
+  //   e.preventDefault();
+  //   postId = 16;
+  //   userId = 1;
+  //   window.location.href = "post.html?postId=" + postId + "&userId=" + userId;
+  // });
 });
