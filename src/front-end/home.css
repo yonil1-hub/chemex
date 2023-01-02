@@ -81,4 +81,18 @@ button[type="submit"] {
 #recent,
 #about {
   text-align: center;
+  margin-top: 20px;
+}
+
+.text-muted {
+  font-size: x-small;
+}
+
+.card {
+  z-index: 1;
+}
+
+.card:hover {
+  z-index: 2;
+  transform: skew(10deg) scale(1.5);
 }
